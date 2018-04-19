@@ -1,3 +1,10 @@
+"""-Edit Cart so it looks at the sesssion["cart"] dictionary for values
+-Flash message in cart?
+-clear cookies if getting improper values
+"""
+
+
+
 """Ubermelon shopping application Flask server.
 
 Provides web interface for browsing melons, seeing detail about a melon, and
@@ -63,14 +70,45 @@ def show_shopping_cart():
     # The logic here will be something like:
     #
     # - get the cart dictionary from the session
+
+    cart = session["cart"]
     # - create a list to hold melon objects and a variable to hold the total
     #   cost of the order
+
+    melons = []
+    total_cost = 0
+
     # - loop over the cart dictionary, and for each melon id:
     #    - get the corresponding Melon object
     #    - compute the total cost for that type of melon
     #    - add this to the order total
     #    - add quantity and total cost as attributes on the Melon object
     #    - add the Melon object to the list created above
+
+    #import pdb;pdb.set_trace()
+
+    for key, value in session["cart"]:
+        melon_id = key
+        qty = value
+
+        #have melon_id for key, qty for value
+        
+        #get melon object by melon id, so we can get melon.price
+        each_melon = get_by_id(melon_id)
+        price = each_melon.price
+        total_price_by_melon = price * qty
+
+        
+        total_cost += total_price_by_melon
+
+        each_melon.quantity = qty
+        each_melon.total_price_melon_type = total_price_by_melon
+
+        melons.append(each_melon)
+        print melons
+
+    import pdb;pdb.set_trace() 
+
     # - pass the total order cost and the list of Melon objects to the template
     #
     # Make sure your function can also handle the case wherein no cart has
@@ -79,7 +117,7 @@ def show_shopping_cart():
     #figure out how to add an item
 
 
-    return render_template("cart.html")
+    return render_template("cart.html", melon_order = melons, total_cost = total_price_by_melon)
 
 
 @app.route("/add_to_cart/<melon_id>")

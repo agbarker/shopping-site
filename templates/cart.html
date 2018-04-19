@@ -13,6 +13,15 @@
         </tr>
         </thead>
         <tbody>
+
+            {% for melon in melon_order %}:
+                <td>{{ melon.common_name }}</td>
+                <td>{{ melon.quantity }}</td>
+                <td>${{ melon.price }}</td>
+                <td>${{ melon.total_price_melon_type }}</td>
+            {% endfor %}
+
+
         <tr>
             <td>Ancient Watermelon</td>
             <td>5</td>
@@ -40,8 +49,30 @@
         </tbody>
     </table>
 
-    <h3>Total: $27.00</h3>
+    <h3>Total: ${{ total_cost }}</h3>
 
     <a href="/checkout" class="btn btn-large btn-primary">Check Out</a>
+
+    <!-- 
+    for keys in session cart:
+        create line in shopping cart display
+
+        <td>melon.common_name
+        value
+        melon.price
+        total = value * price
+
+        melon_id,
+                 melon_type,
+                 common_name,
+                 price,
+                 image_url,
+                 color,
+                 seedless
+
+     -->
+
+
+
 
 {% endblock %}
